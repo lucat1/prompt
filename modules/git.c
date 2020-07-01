@@ -8,6 +8,8 @@
 git_reference *ref;
 #endif
 
+int initialized = 0;
+
 void git_enter() {
   int init_err, repo_err;
 #if GIT_SEGMENT_BRANCH
@@ -20,6 +22,8 @@ void git_enter() {
     // if we cannot initialize libgit2 there's some serious proble
     // and the prompt should be notified
     fail("could not initialize libgit2");
+
+  initialized = 1;
 
   // after initialization we attempt to open the cwd
   // to see if we are inside a repository
@@ -47,8 +51,9 @@ void git_enter() {
 }
 
 void git_leave() {
-  if (git_libgit2_shutdown() < 0)
-    fail("could not *un*initialize libgit2");
+  if(initialized)
+    if(git_libgit2_shutdown() < 0)
+      fail("could not *un*initialize libgit2");
 
 #if GIT_SEGMENT_BRANCH
   if(ref != NULL)
