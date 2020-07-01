@@ -16,8 +16,11 @@
 #include "modules/git.h"
 #endif
 
-char *prompt_cwd, *prompt_status;
-int prompt_duration;
+#if GIT_SEGMENT
+#include "modules/status.h"
+#endif
+
+char *prompt_cwd;
 
 void leave() {
   // free any memory from modules
@@ -27,13 +30,13 @@ void leave() {
 #if GIT_SEGMENT
   git_leave();
 #endif
+#if STATUS_SEGMENT
+  status_leave();
+#endif
 
   // free memory if these pointers are assigned
   if(prompt_cwd != NULL)
     free(prompt_cwd);
-
-  if(prompt_status != NULL)
-    free(prompt_status);
 }
 
 void fail(const char *message, ...) {
@@ -102,30 +105,28 @@ void get_cwd() {
 }
 #endif
 
-void get_status() {
-  prompt_status = get_env("PROMPT_STATUS");
-}
+int get_env_int(char *key) {
+  char *endptr, *tmp;
+  int res;
 
-void get_duration() {
-  char *endptr;
-  char *raw_prompt_duration = get_env("PROMPT_DURATION");
-  prompt_duration = strtol(raw_prompt_duration, &endptr, 10);
+  tmp= get_env(key);
+  errno = 0;
+  res = strtol(tmp, &endptr, 10);
 
-  if(errno == ERANGE || (errno != 0 && prompt_duration == 0))
-    fail("could not parse $PROMPT_DURATION enviroment variable, value: %s", raw_prompt_duration);
+  if(errno == ERANGE || (errno != 0 && res == 0))
+    fail("could not parse $%s enviroment variable, value: %s", key, tmp);
 
-  if (endptr == raw_prompt_duration)
-    fail("couldn't find an interger in the $PROMPT_DURATION variable, value: %s", raw_prompt_duration);
+  if (endptr == tmp)
+    fail("couldn't find an interger in the $%s variable, value: %s", key, tmp);
 
   // if everything went well we can discard the raw value
-  free(raw_prompt_duration);
+  free(tmp);
+  return res;
 }
 
 int main() {
   // initialize variables used in all modules
   get_cwd();
-  get_status();
-  get_duration();
 
 #if PWD_SEGMENT
   pwd_enter();
@@ -133,7 +134,10 @@ int main() {
 #if GIT_SEGMENT
   git_enter();
 #endif
-  printf("$ ");
+#if STATUS_SEGMENT
+  status_enter();
+#endif
+  printf("$ " RESET);
 
   leave();
   return 0;
