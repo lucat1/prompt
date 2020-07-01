@@ -7,7 +7,7 @@ PROMPT_DURATION=0
 PROMPT_STATUS=0
 
 prompt_cmd() {
-  PROMPT_DURATION=${PROMPT_DURATION:-0} PROMPT_STATUS=${PROMPT_STATUS:-0} $PROMPT_CMD
+  PS1=$(PROMPT_DURATION=${PROMPT_DURATION:-0} PROMPT_STATUS=${PROMPT_STATUS:-0} $PROMPT_CMD)
 }
 
 prompt_preexec() {
@@ -18,10 +18,8 @@ prompt_precmd() {
   export PROMPT_STATUS=$?
   if [[ -n "${PROMP_START_TIME+1}" ]]; then
     PROMPT_END_TIME=$($PROMPT_TIME_CMD)
-    echo $PROMP_START_TIME $PROMPT_END_TIME
     PROMPT_DURATION=`expr $PROMPT_END_TIME - $PROMP_START_TIME`
     unset PROMPT_START_TIME PROMPT_END_TIME
-    echo "SET $PROMPT_DURATION"
   else
     unset PROMPT_DURATION
   fi
@@ -33,3 +31,4 @@ prompt_precmd() {
 preexec_functions+=(prompt_preexec)
 precmd_functions+=(prompt_precmd)
 
+PROMPT_COMMAND=prompt_cmd
