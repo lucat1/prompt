@@ -55,13 +55,13 @@ void fail(const char *message, ...) {
 
 char *get_env(char *key) {
   char *res = NULL;
-  const char *ref_cwd = getenv(key);
-  if(ref_cwd == NULL)
+  const char *tmp = getenv(key);
+  if(tmp == NULL)
     fail("could not get $%s enviroment variable", key);
   
   // make a copy of the global shared variable 
   // for the use in this tool
-  res = strdup(ref_cwd);
+  res = strdup(tmp);
 
   if(res == NULL)
     fail("could not copy $%s environment variable into memory", key);
@@ -111,6 +111,10 @@ int main() {
   git_enter();
 #endif
   printf("$ ");
+
+  char *dur = get_env("PROMPT_DURATION");
+  printf("dur: %s\n", dur);
+  free(dur);
 
   leave();
   return 0;
