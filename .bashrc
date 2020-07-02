@@ -3,8 +3,6 @@ source ~/.bash/preexec.sh
 export PROMPT_CMD=$HOME/github/prompt/prompt
 export PROMPT_TIME_CMD=$HOME/github/prompt/prompt_time
 
-PROMPT_DURATION=0
-
 prompt_cmd() {
   PS1=$(PROMPT_DURATION=${PROMPT_DURATION:-0} PROMPT_STATUS=$? $PROMPT_CMD)
 }
@@ -28,5 +26,3 @@ prompt_precmd() {
 # pre-command-execution and post-command-execution to time the runtime
 preexec_functions+=(prompt_preexec)
 precmd_functions+=(prompt_precmd)
-
-PROMPT_COMMAND=prompt_cmd

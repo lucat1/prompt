@@ -31,6 +31,8 @@
 #define GIT_SEGMENT_BRANCH 1 // display the branch name on the git segment 
 
 #define DURATION_SEGMENT 1 // display the previous command duration segment 
+#define DURATION_SEGMENT_THRESHOLD 1000 // threshold after which we display the duration 
+#define DURATION_SEGMENT_COLOR YEL // the color for the duration time value 
 
 #define USER_SEGMENT 1 // display the git segment for the users defined below
 #define USER_SEGMENT_USERS "root,admin" // display the users for which to show the user segment; SEPARATED BY A COMMA
