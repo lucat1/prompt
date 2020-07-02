@@ -1,5 +1,5 @@
-#include <git2.h>
 #include <stdio.h>
+#include <git2.h>
 
 #include "../config.h"
 #include "../prompt.h"

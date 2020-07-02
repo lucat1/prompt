@@ -20,6 +20,10 @@
 #include "modules/status.h"
 #endif
 
+#if LN_SEGMENT 
+#include "modules/ln.h"
+#endif
+
 char *prompt_cwd;
 
 void leave() {
@@ -32,6 +36,9 @@ void leave() {
 #endif
 #if STATUS_SEGMENT
   status_leave();
+#endif
+#if LN_SEGMENT 
+  ln_leave();
 #endif
 
   // free memory if these pointers are assigned
@@ -74,12 +81,29 @@ char *get_env(char *key) {
   return res;
 }
 
-#if CWD_FROM_PWD
-void get_cwd() {
-  prompt_cwd = get_env("PWD");
+int get_env_int(char *key) {
+  char *endptr, *tmp;
+  int res;
+
+  tmp= get_env(key);
+  errno = 0;
+  res = strtol(tmp, &endptr, 10);
+
+  if(errno == ERANGE || (errno != 0 && res == 0))
+    fail("could not parse $%s enviroment variable, value: %s", key, tmp);
+
+  if (endptr == tmp)
+    fail("couldn't find an interger in the $%s variable, value: %s", key, tmp);
+
+  // if everything went well we can discard the raw value
+  free(tmp);
+  return res;
 }
-#else
+
 void get_cwd() {
+#if CWD_FROM_PWD
+  prompt_cwd = get_env("PWD");
+#else
   long path_max;
   size_t size;
   char *ptr;
@@ -102,26 +126,7 @@ void get_cwd() {
       fail("insufficient permissions to get cwd (SYSCALL)");
     }
   }
-}
 #endif
-
-int get_env_int(char *key) {
-  char *endptr, *tmp;
-  int res;
-
-  tmp= get_env(key);
-  errno = 0;
-  res = strtol(tmp, &endptr, 10);
-
-  if(errno == ERANGE || (errno != 0 && res == 0))
-    fail("could not parse $%s enviroment variable, value: %s", key, tmp);
-
-  if (endptr == tmp)
-    fail("couldn't find an interger in the $%s variable, value: %s", key, tmp);
-
-  // if everything went well we can discard the raw value
-  free(tmp);
-  return res;
 }
 
 int main() {
@@ -136,6 +141,9 @@ int main() {
 #endif
 #if STATUS_SEGMENT
   status_enter();
+#endif
+#if LN_SEGMENT 
+  ln_enter();
 #endif
   printf("$ " RESET);
 
