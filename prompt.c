@@ -8,6 +8,10 @@
 #include "config.h"
 #include "prompt.h"
 
+#if USER_SEGMENT 
+#include "modules/user.h"
+#endif
+
 #if PWD_SEGMENT
 #include "modules/pwd.h"
 #endif
@@ -28,6 +32,9 @@ char *prompt_cwd;
 
 void leave() {
   // free any memory from modules
+#if USER_SEGMENT 
+  user_leave();
+#endif
 #if PWD_SEGMENT
   pwd_leave();
 #endif
@@ -133,6 +140,9 @@ int main() {
   // initialize variables used in all modules
   get_cwd();
 
+#if USER_SEGMENT 
+  user_enter();
+#endif
 #if PWD_SEGMENT
   pwd_enter();
 #endif
@@ -145,6 +155,7 @@ int main() {
 #if LN_SEGMENT 
   ln_enter();
 #endif
+
   printf("$ " RESET);
 
   leave();

@@ -23,10 +23,14 @@
 /* * * * * * * * * * * * * */
 #define PWD_SEGMENT 1 // display the current folder you're in (PWD) 
 #define PWD_SEGMENT_ENV 0 // try to use the $HOME variable by default or fallback to getpwuid 
-#define PWD_SEGMENT_COLOR BLU // try to use the $HOME variable by default or fallback to getpwuid 
+#define PWD_SEGMENT_COLOR BLU // the color for the path segment 
 
-#define GIT_SEGMENT 1 // display the git secment, as configured below 
+#define GIT_SEGMENT 1 // display the git segment, as configured below 
 #define GIT_SEGMENT_BRANCH 1 // display the branch name on the git segment 
+
+#define USER_SEGMENT 1 // display the git segment for the users defined below
+#define USER_SEGMENT_USERS "root,admin" // display the users for which to show the user segment; SEPARATED BY A COMMA
+#define USER_SEGMENT_COLOR RED // the color for the username inside this segment
 
 #define LN_SEGMENT 1 // go to a new line before the status segment 
 
