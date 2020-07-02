@@ -28,7 +28,7 @@ void pwd_enter() {
   substr = strstr(prompt_cwd, home);
   if (substr == NULL) {
     // outside of a home directory, just print the directory entirely
-    printf("%s ", prompt_cwd);
+    printf(PWD_SEGMENT_COLOR "%s" RESET " ", prompt_cwd);
     return;
   }
   index = (int) (strchr(home, *(substr+strlen(substr)))- home);
@@ -37,7 +37,7 @@ void pwd_enter() {
   homeless_cwd = malloc(diff); 
   strncpy(homeless_cwd, prompt_cwd+index, diff);
 
-  printf("~%s ", homeless_cwd);
+  printf(PWD_SEGMENT_COLOR "~%s" RESET " ", homeless_cwd);
 }
 
 void pwd_leave() {
