@@ -20,12 +20,16 @@
 #include "modules/git.h"
 #endif
 
-#if GIT_SEGMENT
-#include "modules/status.h"
+#if DURATION_SEGMENT 
+#include "modules/duration.h"
 #endif
 
 #if LN_SEGMENT 
 #include "modules/ln.h"
+#endif
+
+#if STATUS_SEGMENT 
+#include "modules/status.h"
 #endif
 
 char *prompt_cwd;
@@ -41,11 +45,14 @@ void leave() {
 #if GIT_SEGMENT
   git_leave();
 #endif
-#if STATUS_SEGMENT
-  status_leave();
+#if DURATION_SEGMENT 
+  duration_leave();
 #endif
 #if LN_SEGMENT 
   ln_leave();
+#endif
+#if STATUS_SEGMENT
+  status_leave();
 #endif
 
   // free memory if these pointers are assigned
@@ -140,6 +147,10 @@ int main() {
   // initialize variables used in all modules
   get_cwd();
 
+#if LN_BEFORE
+  printf("\n");
+#endif
+
 #if USER_SEGMENT 
   user_enter();
 #endif
@@ -149,11 +160,14 @@ int main() {
 #if GIT_SEGMENT
   git_enter();
 #endif
-#if STATUS_SEGMENT
-  status_enter();
+#if DURATION_SEGMENT 
+  duration_enter();
 #endif
 #if LN_SEGMENT 
   ln_enter();
+#endif
+#if STATUS_SEGMENT
+  status_enter();
 #endif
 
   printf("$ " RESET);

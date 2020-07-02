@@ -6,6 +6,8 @@
 // but we can also get it from the process' properties with getcwd(3)
 #define CWD_FROM_PWD 1 
 
+#define LN_BEFORE 1 // add a new line before each prompt
+
 /* * * * * * * * * * * * * */
 //         COLORS 
 /* * * * * * * * * * * * * */
@@ -27,6 +29,8 @@
 
 #define GIT_SEGMENT 1 // display the git segment, as configured below 
 #define GIT_SEGMENT_BRANCH 1 // display the branch name on the git segment 
+
+#define DURATION_SEGMENT 1 // display the previous command duration segment 
 
 #define USER_SEGMENT 1 // display the git segment for the users defined below
 #define USER_SEGMENT_USERS "root,admin" // display the users for which to show the user segment; SEPARATED BY A COMMA
