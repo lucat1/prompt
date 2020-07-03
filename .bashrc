@@ -8,17 +8,21 @@ prompt_cmd() {
 }
 
 prompt_preexec() {
-  PROMP_START_TIME=$($PROMPT_TIME_CMD)
+  if [ "$PREEXEC_READY" = "true" ]; then
+    PREEXEC_READY=false
+    PROMPT_START_TIME=$($PROMPT_TIME_CMD)
+  fi
 }
 
 prompt_precmd() {
-  if [[ -n "${PROMP_START_TIME+1}" ]]; then
+  if [[ $PROMPT_START_TIME ]]; then
     PROMPT_END_TIME=$($PROMPT_TIME_CMD)
-    PROMPT_DURATION=`expr $PROMPT_END_TIME - $PROMP_START_TIME`
+    PROMPT_DURATION=`expr $PROMPT_END_TIME - $PROMPT_START_TIME`
     unset PROMPT_START_TIME PROMPT_END_TIME
   else
-    unset PROMPT_DURATION
+    unset PROMPT_START_TIME PROMPT_END_TIME PROMPT_DURATION
   fi
+  PREEXEC_READY=true
 
   prompt_cmd
 }
