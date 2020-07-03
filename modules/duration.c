@@ -6,7 +6,7 @@
 #include "../prompt.h"
 
 #define TIME_SECOND 1000 
-#define TIME_MINUTE TIME_SECOND * 60
+#define TIME_MINUTE 60
 #define TIME_HOUR TIME_MINUTE * 60
 
 void duration_enter() {
@@ -19,20 +19,19 @@ void duration_enter() {
   if (dur < DURATION_SEGMENT_THRESHOLD)
     return;
 
-  if(dur < TIME_MINUTE)
-    // print seconds 
-    asprintf(&fmt, "%ds", dur / TIME_SECOND);
+  dur /= TIME_SECOND;
 
-  if(dur < TIME_HOUR && dur > TIME_MINUTE) {
+  if (dur < TIME_MINUTE) {
+    // print seconds
+    asprintf(&fmt, "%is", dur); 
+  } else if (dur < TIME_HOUR) {
     // print minutes 
-    int secs = dur % TIME_MINUTE;
-    asprintf(&fmt, "%dm %ds", dur / TIME_MINUTE, secs / TIME_SECOND);
-  }
-
-  if(dur >= TIME_HOUR && dur > TIME_MINUTE) {
+    int secs = dur %TIME_MINUTE;
+    asprintf(&fmt, "%im %is", dur / TIME_MINUTE, secs / TIME_SECOND);
+  } else if (dur >= TIME_HOUR) {
     // print hours 
     int mins = dur % TIME_HOUR;
-    asprintf(&fmt, "%dh %dm", dur / TIME_HOUR, mins / TIME_MINUTE);
+    asprintf(&fmt, "%ih %im", dur / TIME_HOUR, mins / TIME_MINUTE);
   }
 
   printf("took " DURATION_SEGMENT_COLOR "%s" RESET, fmt);

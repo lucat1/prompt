@@ -170,7 +170,7 @@ int main() {
   status_enter();
 #endif
 
-  printf(PROMPT_CHAR " " RESET);
+  printf(PROMPT_CHAR RESET " ");
 
   leave();
   return 0;
