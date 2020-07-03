@@ -4,7 +4,7 @@ export PROMPT_CMD=$HOME/github/prompt/prompt
 export PROMPT_TIME_CMD=$HOME/github/prompt/prompt_time
 
 prompt_cmd() {
-  PS1=$(PROMPT_DURATION=${PROMPT_DURATION:-0} PROMPT_STATUS=$? $PROMPT_CMD)
+  PS1=$(PROMPT_DURATION=${PROMPT_DURATION:-0} PROMPT_STATUS=${PROMPT_STATUS} $PROMPT_CMD)
 }
 
 prompt_preexec() {
@@ -15,6 +15,8 @@ prompt_preexec() {
 }
 
 prompt_precmd() {
+  PROMPT_STATUS=$?
+
   if [[ $PROMPT_START_TIME ]]; then
     PROMPT_END_TIME=$($PROMPT_TIME_CMD)
     PROMPT_DURATION=`expr $PROMPT_END_TIME - $PROMPT_START_TIME`

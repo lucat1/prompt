@@ -4,12 +4,11 @@
 #include "../config.h"
 #include "../prompt.h"
 
-int prompt_status;
-
 void status_enter() {
-  prompt_status = get_env_int("PROMPT_STATUS");
+  int status;
 
-  printf(prompt_status != 0 ? RED : GRN);
+  status = get_env_int("PROMPT_STATUS");
+  printf(status != 0 ? RED : GRN);
 }
 
 void status_leave() {}
