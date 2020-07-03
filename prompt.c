@@ -72,7 +72,7 @@ void fail(const char *message, ...) {
   printf("\n");
 #else
   // print a default simple prompt in production
-  printf("$ ");
+  printf(RESET PROMPT_CHAR " ");
 #endif
 
   // free the used memory
@@ -170,7 +170,7 @@ int main() {
   status_enter();
 #endif
 
-  printf("$ " RESET);
+  printf(PROMPT_CHAR " " RESET);
 
   leave();
   return 0;

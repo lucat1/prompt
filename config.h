@@ -8,6 +8,8 @@
 
 #define LN_BEFORE 1 // add a new line before each prompt
 
+#define PROMPT_CHAR "$" // the character before the prompt input section 
+
 /* * * * * * * * * * * * * */
 //         COLORS 
 /* * * * * * * * * * * * * */
