@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #define DEBUG 1 // toggle debug logging
 
@@ -43,3 +44,5 @@
 #define LN_SEGMENT 1 // go to a new line before the status segment 
 
 #define STATUS_SEGMENT 1 // display the status segment exit code != 0 -> red : green 
+
+#endif // CONFIG_H
